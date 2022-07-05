@@ -1,0 +1,61 @@
+library(data.table)
+library(cluster)
+library("ggplot2")
+library("ggdendro")
+library("dplyr")
+library("reshape2")
+library(wesanderson)
+color <- as.array(wes_palettes$Darjeeling1)
+map_color <- function(word) {
+  if(grepl("run",word)) {
+    return (color[1])
+  }
+  if(grepl("walk",word)) {
+    return (color[2])
+  }
+  if(grepl("jump",word)) {
+    return (color[3])
+  }
+  return (color[4])
+}
+map_names <- function(word) {
+  if(grepl("run",word)) {
+    return ("run")
+  }
+  if(grepl("walk",word)) {
+    return ("walk")
+  }
+  if(grepl("jump",word)) {
+    return ("jump")
+  }
+  return (word)
+}
+
+
+
+# setwd("/home/paalel/dev/master/code/so3/clustering/")
+# system("./fetch_csv.sh")
+data <- read.csv("data/similarity.csv", header = TRUE)
+data = data.frame(data)
+# data<- filter(data, !is.na(se3_signature_distance))
+names <- read.csv("data/names.csv", header = TRUE)[,2]
+distance_matrix <- as.matrix(dcast(data, animation_id1 ~ animation_id2, value.var="signature_distance"))[,-1]
+row.names(distance_matrix) <- as.array(names)
+# distance_matrix = na.omit(distance_matrix)
+distribution <- as.dist(distance_matrix)
+
+title <- "dp dist"
+mds.coor <- cmdscale(distribution, k=2)
+plot(mds.coor[,1], mds.coor[,2], type="n", xlab="", ylab="", main=title, yaxt='n',xaxt='n')
+grid(5, 5, lwd = 2, lty=1, col="grey95")
+par(mar=c(0.5,0.5,2.5,0.5))
+rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "transparent")
+text(jitter(mds.coor[,1]), jitter(mds.coor[,2]), unlist(Map(map_names, names)), cex=0.8, col=unlist(Map(map_color, names)))
+
+
+
+# pamy <- pam(distance_matrix, 5)
+# (kmcol <- pamy$clustering)
+# hc <- hclust(distribution, method = "single")
+# ggdendrogram(hc, rotate = TRUE, theme_dendro = FALSE)
+#
