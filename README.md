@@ -1,8 +1,14 @@
 
 # Project structure
 
-**Notice:** Forked from [paalel/master](https://github.com/paalel/master).
-This fork exists so that the package can be installed via `pip`. Some other very small changes were made.  
+**Notice:** Forked from [paalel/Signatures-in-Shape-Analysis](https://github.com/paalel/Signatures-in-Shape-Analysis).
+This fork exists so that [paalel/Signatures-in-Shape-Analysis](https://github.com/paalel/Signatures-in-Shape-Analysis) can be used with `python3` and installed via `pip`. 
+Some other minor changes were made to enable plotting of the value matrix.   
+
+To install the package, download it, and make the database as described below. Then install the package with 
+
+    pip3 install -e . 
+from the package root. 
 
 ## Animation
 The animation folder contains two subfolders: src and db.
